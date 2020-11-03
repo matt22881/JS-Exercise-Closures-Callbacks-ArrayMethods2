@@ -129,20 +129,37 @@ function getInningScore(cb){
    }
     return innScore
 }
-
 function scoreboard(cb1, cb2, inns) {
-  let score = {
-
-      home: 0,
-      away: 0
-    }
-
-   for (let i=0; i < inns; i++){
-
-    score.home = score.home + cb2(cb1).home
-    score.away = score.away + cb2(cb1).away
-    console.log(`Inning # ${i +1}: Home: ${score.home} - Away: ${score.away}`)
+  let inningScore = {
+    home: 0,
+    away: 0
   }
-return `Final Score: Home: ${score.home} - Away ${score.away}`
+  let totalScore = {
+    home: 0,
+    away: 0
+  }
+  let score = [
+    {
+      inn: 0,
+      home: 0,
+      away: 0,
+      homeTotal: 0,
+      awayTotal: 0
+    }
+]
+   for (let i = 1; i < inns + 1; i++){
+    inningScore.home = cb2(cb1).home
+    inningScore.away = cb2(cb1).away
+    score.push ({
+       inn: i,
+       home: inningScore.home,
+       away: inningScore.away,
+       homeTotal: (totalScore.home + inningScore.home),
+       awayTotal: (totalScore.away + inningScore.away)
+      })
+      totalScore.home = totalScore.home + score[i].home
+      totalScore.away = totalScore.away + score[i].away
+  }
+  return (totalScore, score)
 }
 console.log(scoreboard(inning, getInningScore, 9))
